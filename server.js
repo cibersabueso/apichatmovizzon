@@ -33,7 +33,7 @@ app.post('/api/send-message', (req, res) => {
     return res.status(400).send('No se proporcionó un mensaje.');
   }
   const db = admin.firestore();
-  const docRef = db.collection('mensajes').doc(); // Asume que tienes una colección 'mensajes'
+  const docRef = db.collection('messages').doc(); // Asume que tienes una colección 'mensajes'
   
   docRef.set({
     texto: message,
