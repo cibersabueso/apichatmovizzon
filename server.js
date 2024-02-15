@@ -18,14 +18,33 @@ app.get('/', (req, res) => {
   res.send('API Movizzon está corriendo.');
 });
 
-// Este endpoint parece ser solo para pruebas, así que lo dejaremos como está
-app.get('/api/message', (req, res) => {
-  const chatMessage = {
-    text: "Producto temporalmente sin stock",
-    imageUrl: "https://www.adslzone.net/app/uploads-adslzone.net/2019/04/borrar-fondo-imagen.jpg"
-  };
-  res.json(chatMessage);
+// ... otros endpoints ...
+
+// Endpoint para listar usuarios
+app.get('/api/list-users', async (req, res) => {
+  // Aquí deberías implementar tu lógica de autenticación y autorización
+  // Por ejemplo, verificar un token de autenticación de Firebase
+  // if (!req.headers.authorization || !tuFuncionDeVerificacion(req.headers.authorization)) {
+  //   return res.status(403).send('No autorizado');
+  // }
+
+  try {
+    // Lista los primeros 1000 usuarios (ajusta este número según tus necesidades)
+    const listUsersResult = await admin.auth().listUsers(1000);
+    const users = listUsersResult.users.map(userRecord => ({
+      uid: userRecord.uid,
+      email: userRecord.email,
+      displayName: userRecord.displayName,
+      photoURL: userRecord.photoURL,
+    }));
+
+    res.status(200).send(users);
+  } catch (error) {
+    res.status(500).send(`Error al listar los usuarios: ${error.message}`);
+  }
 });
+
+// ... otros endpoints ...
 
 // Endpoint para enviar mensajes al chat
 app.post('/api/send-message', (req, res) => {
